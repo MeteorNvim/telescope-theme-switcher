@@ -24,7 +24,7 @@ local theme_swither = function(opts)
         local ft = vim.fn.expand('&filetype')
         require("telescope.previewers.utils").highlighter(self.state.bufnr, ft)
 
-        reload_theme(entry.value)
+        set_theme(entry.value)
       end,
     }
 
