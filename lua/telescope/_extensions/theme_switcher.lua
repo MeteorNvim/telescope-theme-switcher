@@ -15,18 +15,16 @@ end
 local theme_swither = function(opts)
     
     local previewer = previewers.new_buffer_previewer {
-      define_preview = function(self, entry)
-        local bufnr = vim.api.nvim_get_current_buf()
+    define_preview = function(self, entry)
+      local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+      vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, lines)
+            
+      local ft = (vim.filetype.match { buf = bufnr } or "diff"):match "%w+"
+      require("telescope.previewers.utils").highlighter(self.state.bufnr, ft)
 
-        local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
-        vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, lines)
-
-        local ft = vim.fn.expand('&filetype')
-        require("telescope.previewers.utils").highlighter(self.state.bufnr, ft)
-
-        set_theme(entry.value)
-      end,
-    }
+      set_theme(entry.value)
+    end,
+  }
 
     opts = opts or {}
     pickers.new(opts, {
