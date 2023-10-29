@@ -6,20 +6,27 @@ local action_state = require "telescope.actions.state"
 local previewers = require "telescope.previewers"
 local json = require("core.utils.json")
 
+-- Import required modules and libraries.
+
 local function set_theme(theme)
   vim.cmd(string.format("colorscheme %s", theme))
 end
 
+-- Define a function to set the Vim colorscheme using the given theme.
 
 local theme_switcher = function(opts)
   local before_background = vim.o.background
   local before_color = vim.api.nvim_exec("colorscheme", true)
   local need_restore = true
 
+  -- Capture the current background setting and the current Vim colorscheme.
+
   local colors = opts.colors or { before_color }
   if not vim.tbl_contains(colors, before_color) then
     table.insert(colors, 1, before_color)
   end
+
+  -- Ensure that the current colorscheme is in the list of available colorschemes.
 
   colors = vim.list_extend(
     colors,
@@ -28,7 +35,11 @@ local theme_switcher = function(opts)
     end, vim.fn.getcompletion("", "color"))
   )
 
+  -- Get a list of available colorschemes, excluding the current one.
+
   local bufnr = vim.api.nvim_get_current_buf()
+
+  -- Get the current buffer number.
 
   local previewer = previewers.new_buffer_previewer {
     define_preview = function(self, entry)
@@ -41,6 +52,8 @@ local theme_switcher = function(opts)
       set_theme(entry.value)
     end,
   }
+
+  -- Define a custom previewer to display the selected colorscheme in the buffer.
 
   local picker = pickers.new(opts, {
     prompt_title = "Set theme",
@@ -61,6 +74,8 @@ local theme_switcher = function(opts)
           end,
         })
       end)
+
+      -- Set up an autocmd to update the colorscheme when the user types in the search.
 
       -- Preview theme on key pressed
       map("i", "<C-n>", function()
@@ -90,6 +105,9 @@ local theme_switcher = function(opts)
         set_theme(selection.value)
         json.setValue("theme", selection.value)
       end)
+
+      -- Customize key mappings for selection and theme application.
+
       return true
     end,
   })
@@ -108,6 +126,10 @@ local theme_switcher = function(opts)
   picker:find()
 end
 
+-- Define a function to create a picker for selecting and applying colorschemes.
+
 return require("telescope").register_extension {
   exports = { theme_switcher = theme_switcher },
 }
+
+-- Register the "theme_switcher" extension with Telescope.nvim.
