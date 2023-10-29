@@ -188,6 +188,6 @@ theme_swither = function(opts)
 end
 
 return require("telescope").register_extension {
-    exports = { theme_switcher = theme_swither },
+    exports = { theme_switcher = theme },
 
 }
