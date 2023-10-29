@@ -94,16 +94,16 @@ local theme_switcher = function(opts)
     end,
   })
 
-  -- if opts.enable_preview then
-  --   local close_windows = picker.close_windows
-  --   picker.close_windows = function(status)
-  --     close_windows(status)
-  --     if need_restore then
-  --       vim.o.background = before_background
-  --       vim.cmd("colorscheme " .. before_color)
-  --     end
-  --   end
-  -- end
+  if opts.enable_preview then
+    local close_windows = picker.close_windows
+    picker.close_windows = function(status)
+      close_windows(status)
+      if need_restore then
+        vim.o.background = before_background
+        vim.cmd("colorscheme " .. before_color)
+      end
+    end
+  end
 
   picker:find()
 end
