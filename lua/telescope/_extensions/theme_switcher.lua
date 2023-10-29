@@ -3,6 +3,8 @@ local finders = require "telescope.finders"
 local conf = require("telescope.config").values
 local actions = require "telescope.actions"
 local action_state = require "telescope.actions.state"
+local previewers = require "telescope.previewers"
+
 local colors = require("core.utils.colors")
 local json = require("core.utils.json")
 
@@ -11,9 +13,25 @@ local function set_theme(theme)
 end
 
 local theme_swither = function(opts)
+    
+    local previewer = previewers.new_buffer_previewer {
+      define_preview = function(self, entry)
+        local bufnr = vim.api.nvim_get_current_buf()
+
+        local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+        vim.api.nvim_buf_set_lines(self.state.bufnr, 0, -1, false, lines)
+
+        local ft = vim.fn.expand('&filetype')
+        require("telescope.previewers.utils").highlighter(self.state.bufnr, ft)
+
+        reload_theme(entry.value)
+      end,
+    }
+
     opts = opts or {}
     pickers.new(opts, {
         prompt_title = "Theme Switcher",
+        previewer = previewer,
         finder = finders.new_table {
             results = colors.get_installed_colorschemes(),
         },
