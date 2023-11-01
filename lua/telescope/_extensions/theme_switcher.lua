@@ -98,6 +98,12 @@ local theme_switcher = function(opts)
         set_theme(action_state.get_selected_entry().value)
       end)
 
+      map("n", "<Esc>", function()
+        actions.close()
+        vim.o.background = before_background
+        set_theme(before_color)
+      end)
+
       -- Apply theme
       actions.select_default:replace(function()
         actions.close(prompt_bufnr)
