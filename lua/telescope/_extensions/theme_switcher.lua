@@ -99,7 +99,7 @@ local theme_switcher = function(opts)
       end)
 
       map("n", "<Esc>", function()
-        actions.close()
+        actions.close(prompt_bufnr)
         vim.o.background = before_background
         set_theme(before_color)
       end)
