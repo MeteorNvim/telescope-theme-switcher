@@ -7,3 +7,12 @@
     end
 }
 ```
+
+# if you are not using MeteorNvim
+you must create the following file: `~/.config/nvim/settings.json`
+and add the following lines:
+```json
+{
+    "theme": "default"
+}
+```
